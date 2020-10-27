@@ -35,3 +35,96 @@ score_pen.setposition(-290, 280)
 scorestring = "Score: %s" %score
 score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
 score_pen.hideturtle()
+
+player = turtle.Turtle()
+#player.color("blue")
+player.shape("player.gif")
+player.penup()
+player.speed(0)
+player.setposition(0,-250)
+player.setheading(90)
+
+playerspeed = 15
+
+# Choose a number of enemies
+number_of_enemies = 10
+# Creat an empty list of enemies
+enemies = []
+
+# Add enemies to the list
+for i in range(number_of_enemies):
+    # create the enemy
+    enemies.append(turtle.Turtle())
+
+for enemy in enemies:
+    #enemy.color("Red")
+    enemy.shape("invader.gif")
+    enemy.penup()
+    enemy.speed(0)
+    x = random.randint(-200, 200)
+    y =  random.randint(100, 250)
+    enemy.setposition(x, y)
+
+enemyspeed = 5
+
+# Creat the player's bullet
+bullet = turtle.Turtle()
+bullet.color("yellow")
+bullet.shape("triangle")
+bullet.penup()
+bullet.speed(0)
+bullet.setheading(90)
+bullet.shapesize(0.5,0.5)
+bullet.hideturtle()
+
+bulletspeed = 30
+
+# define bullet state
+# ready - ready to fire
+# fire - bullet is firing
+bulletstate = "ready"
+
+
+# Move the player left and right
+def move_left():
+    x = player.xcor()
+    x -= playerspeed
+    if x < -280:
+        x = -280
+    player.setx(x)
+
+def move_right():
+    x = player.xcor()
+    x += playerspeed
+    if x > 280:
+        x = 280
+    player.setx(x)
+
+def fire_bullet():
+    # Declare bulletstate as a global if it needs changed
+    global bulletstate
+    if bulletstate == "ready":
+        bulletstate = "fire"
+        # Move the bullet to the just above the player
+        winsound.PlaySound("laser.wav", winsound.SND_ASYNC) #sound for windows
+        #os.system("aplay laser.wav&") #sound for linux
+        x = player.xcor()
+        y = player.ycor() + 10
+        bullet.setposition(x,y)
+        bullet.showturtle()
+
+# For collision between enemy and bullet
+def isCollision_enemy_bullet(t1, t2):
+    distance = math.sqrt(math.pow(t1.xcor()-t2.xcor(),2)+math.pow(t1.ycor()-t2.ycor(),2))
+    if distance < 25:
+        return True
+    else:
+        return False
+
+# For collision between enemy and player
+def isCollision_enemy_player(t1, t2):
+    distance = math.sqrt(math.pow(t1.xcor()-t2.xcor(),2)+math.pow(t1.ycor()-t2.ycor(),2))
+    if distance < 30:
+        return True
+    else:
+        return False
