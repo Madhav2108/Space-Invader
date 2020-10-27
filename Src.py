@@ -3,7 +3,7 @@ import winsound
 import os
 import math
 import random
-
+# made by madhav narayan 
 wn = turtle.Screen()
 wn.bgcolor("blue")
 wn.title("Space Invaders by Mahesh Sawant")
@@ -82,7 +82,7 @@ bulletspeed = 30
 bulletstate = "ready"
 
 
-
+# made by madhav narayan
 def move_left():
     x = player.xcor()
     x -= playerspeed
@@ -138,7 +138,7 @@ missed_enemies = 0
 while True:
 
     for enemy in enemies:
-        
+        # made by madhav narayan
         x = enemy.xcor()
         x += enemyspeed
         enemy.setx(x)
@@ -180,7 +180,7 @@ while True:
                     e.showturtle()
            
             enemyspeed *= -1
-
+# made by madhav narayan
         if isCollision_enemy_bullet(bullet, enemy):
             winsound.PlaySound("explosion-e+b.wav", winsound.SND_ASYNC) 
             
@@ -197,7 +197,7 @@ while True:
             scorestring = "Score: %s" %score
             score_pen.clear()
             score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
-        
+        # made by madhav narayan
         if isCollision_enemy_player(player, enemy):
             Game_Over = True
         if Game_Over == True:
@@ -213,7 +213,7 @@ while True:
         y += bulletspeed
         bullet.sety(y)
 
-
+# made by madhav narayan
     if bullet.ycor() > 275:
         bullet.hideturtle()
         bulletstate = "ready"
