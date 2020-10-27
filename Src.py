@@ -128,3 +128,102 @@ def isCollision_enemy_player(t1, t2):
         return True
     else:
         return False
+
+# Create keyboard bindings
+turtle.listen()
+turtle.onkey(move_left, "Left")
+turtle.onkey(move_right, "Right")
+turtle.onkey(fire_bullet, "space")
+
+# Main game loop
+Game_Over = False
+missed_enemies = 0
+while True:
+
+    for enemy in enemies:
+        # Move the enemy
+        x = enemy.xcor()
+        x += enemyspeed
+        enemy.setx(x)
+
+
+        # Move the enemy back and down
+        if enemy.xcor() > 270:
+            # Move all enemies down
+            for e in enemies:
+                y = e.ycor()
+                y -= 40
+                e.sety(y)
+                if e.ycor() < -285 and Game_Over == False:
+                    e.hideturtle()
+                    missed_enemies += 1
+                    if missed_enemies == 5:
+                        Game_Over = True
+                    x = random.randint(-200, 200)
+                    y = random.randint(100, 250)
+                    e.setposition(x, y)
+                    e.showturtle()
+            # Change enemy direction
+            enemyspeed *= -1
+
+        if enemy.xcor() < -270:
+            # Move all enemies down
+            for e in enemies:
+                y = e.ycor()
+                y -= 40
+                e.sety(y)
+                if e.ycor() < -285 and Game_Over == False:
+                    e.hideturtle()
+                    missed_enemies += 1
+                    if missed_enemies ==5:
+                        Game_Over = True
+                    x = random.randint(-200, 200)
+                    y = random.randint(100, 250)
+                    e.setposition(x, y)
+                    e.showturtle()
+            # Change enemy direction
+            enemyspeed *= -1
+
+        # check for a collision between the bullet and the enemy
+        if isCollision_enemy_bullet(bullet, enemy):
+            winsound.PlaySound("explosion-e+b.wav", winsound.SND_ASYNC) #sound for windows
+            #os.system("aplay explosion-e+b.wav&")  # sound for linux
+            # Reset the bullet
+            bullet.hideturtle()
+            bulletstate = "ready"
+            bullet.setposition(0, -400)
+            # Reset the enemy
+            x = random.randint(-200, 200)
+            y = random.randint(100, 250)
+            enemy.setposition(x, y)
+            enemyspeed += 0.5
+            # update the score
+            score += 10
+            scorestring = "Score: %s" %score
+            score_pen.clear()
+            score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
+        # check for a collision between the player and enemy
+        if isCollision_enemy_player(player, enemy):
+            #winsound.PlaySound("explosion-e+p.wav", winsound.SND_ASYNC) #sound for windows
+            # os.system("aplay explosion-e+p.wav&")  # sound for linux
+            Game_Over = True
+        if Game_Over == True:
+            player.hideturtle()
+            bullet.hideturtle()
+            for e in enemies:
+                e.hideturtle()
+            wn.bgpic("end.gif")
+            break
+
+    # Move the bullet
+    if bulletstate == "fire":
+        y = bullet.ycor()
+        y += bulletspeed
+        bullet.sety(y)
+
+    # Check to see if the bullet has gone to the top
+    if bullet.ycor() > 275:
+        bullet.hideturtle()
+        bulletstate = "ready"
+
+delay = input("Press enter to finish")
